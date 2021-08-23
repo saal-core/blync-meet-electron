@@ -16,6 +16,9 @@ import { LoadingIndicator, Wrapper } from '../styled';
 import { createConferenceObjectFromURL, getServerURL } from '../../utils';
 import Loading from '../../always-on-top/Loading';
 
+const electron = window.require('electron');
+const { BrowserWindow } = electron.remote
+
 const ENABLE_REMOTE_CONTROL = false;
 
 type Props = {
@@ -222,15 +225,22 @@ class Home extends Component<Props, State> {
         });
 
         this._api.on('explicitIframeReload', this._onExplicitIframeReload);
+
+        // start listening on this events
         this._api.on('liveMessage', ({
                 from,
                 id,
                 message,
-                stamp
+                stamp,
+                isChatOpen
             }) => {
-            new Notification(`Message from ${from}`, {
-                body: message
-            });
+                const [mainWindow] = BrowserWindow.getAllWindows();
+
+                if(!mainWindow.isFocused() || !isChatOpen) {
+                    new Notification(`Message from ${from}`, {
+                        body: message
+                    });
+                }
         });
 
         const { RemoteControl,
