@@ -237,7 +237,7 @@ class Home extends Component<Props, State> {
                 const [mainWindow] = BrowserWindow.getAllWindows();
 
                 if(!mainWindow.isFocused() || !isChatOpen) {
-                    new Notification(`Message from ${from}`, {
+                    new Notification(`${from ? 'Message from '+ from : ''}`, {
                         body: message
                     });
                 }
