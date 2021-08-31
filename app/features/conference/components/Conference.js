@@ -301,7 +301,7 @@ class Conference extends Component<Props, State> {
                 message,
                 stamp
             }) => {
-            new Notification(`${from ? 'Message from '+ from : ''}`, {
+            new Notification(`${from || ''}`, {
                 body: message
             });
         });
