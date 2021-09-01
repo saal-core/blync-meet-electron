@@ -76,11 +76,11 @@
           "target": "nsis"
         }
       ],
+      "certificateFile": "C:\\Users\\jenkins\\.ssh\\saal-cs-cert-withkey.pfx",
       "signingHashAlgorithms": [
         "sha256"
       ],
-      "publisherName": "SAAL OPERATING SYSTEMS - SOLE PROPRIETORSHIP L.L.C.",
-      "certificateSubjectName": "CN = SAAL OPERATING SYSTEMS - SOLE PROPRIETORSHIP L.L.C., O = SAAL OPERATING SYSTEMS - SOLE PROPRIETORSHIP L.L.C., L = Abu Dhabi, C = AE, SERIALNUMBER = CN-2456626, 1.3.6.1.4.1.311.60.2.1.2 = Abu Dhabi, 1.3.6.1.4.1.311.60.2.1.3 = AE, 2.5.4.15 = Private Organization",
+      "publisherName": "SAAL Operating Systems - Sole Proprietorship LLC",
       "signAndEditExecutable": true
     },
     "directories": {
