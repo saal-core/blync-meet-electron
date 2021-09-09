@@ -295,6 +295,16 @@ class Conference extends Component<Props, State> {
         });
 
         this._api.on('explicitIframeReload', this._onExplicitIframeReload);
+        this._api.on('liveMessage', ({
+                from,
+                id,
+                message,
+                stamp
+            }) => {
+            new Notification(`${from || ''}`, {
+                body: message
+            });
+        });
 
         this._api.on('suspendDetected', this._onVideoConferenceEnded);
         this._api.on('readyToClose', this._onVideoConferenceEnded);

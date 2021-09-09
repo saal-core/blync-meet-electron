@@ -1,6 +1,6 @@
 {
   "name": "jifmeet-electron",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Electron application for Jifmeet",
   "main": "./build/main.js",
   "productName": "Jifmeet",
