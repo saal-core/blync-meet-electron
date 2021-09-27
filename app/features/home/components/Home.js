@@ -95,6 +95,7 @@ class Home extends Component<Props, State> {
 
         this._onIframeLoad = this._onIframeLoad.bind(this);
         this._onExplicitIframeReload = this._onExplicitIframeReload.bind(this);
+        this._updateAppBadge = this._updateAppBadge.bind(this);
     }
 
     /**
@@ -142,6 +143,12 @@ class Home extends Component<Props, State> {
         if (this._api) {
             this._api.dispose();
         }
+    }
+
+    _updateAppBadge: (*) => void;
+
+    _updateAppBadge({showBadge}) {
+        electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
     }
 
     _onExplicitIframeReload: (*) => void;
@@ -225,6 +232,8 @@ class Home extends Component<Props, State> {
         });
 
         this._api.on('explicitIframeReload', this._onExplicitIframeReload);
+
+        this._api.on('updateAppBadge', this._updateAppBadge);
 
         // start listening on this events
         this._api.on('liveMessage', ({
