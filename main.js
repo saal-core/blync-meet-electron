@@ -9,6 +9,9 @@ const {
     dialog
 } = require('electron');
 
+const os = require('os');
+const Badge = require('./app/features/windows-badge');
+
 const contextMenu = require('electron-context-menu');
 const debug = require('electron-debug');
 const isDev = require('electron-is-dev');
@@ -213,6 +216,12 @@ function createJitsiMeetWindow() {
     };
 
     mainWindow = new BrowserWindow(options);
+
+    if(os.platform() === "win32") {
+        const badgeOptions = {}
+        new Badge(mainWindow, badgeOptions);
+    }
+
     windowState.manage(mainWindow);
     mainWindow.loadURL(indexURL);
 

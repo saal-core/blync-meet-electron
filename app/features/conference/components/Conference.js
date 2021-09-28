@@ -15,9 +15,10 @@ import { conferenceEnded, conferenceJoined } from '../actions';
 import JitsiMeetExternalAPI from '../external_api';
 import { LoadingIndicator, Wrapper } from '../styled';
 import Loading from '../../always-on-top/Loading';
-import { createConferenceObjectFromURL, createMeetingWindow, getServerURL } from '../../utils';
+import { createConferenceObjectFromURL, /*createMeetingWindow,*/ getServerURL } from '../../utils';
 
 const electron = window.require('electron');
+const os = window.require('os');
 
 const ENABLE_REMOTE_CONTROL = false;
 
@@ -215,7 +216,12 @@ class Conference extends Component<Props, State> {
     _updateAppBadge: (*) => void;
 
     _updateAppBadge(showBadge) {
-        electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
+        if(os.platform() === "win32") {
+            electron.ipcRenderer?.sendSync('update-badge', showBadge)
+        }
+        else {
+            electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
+        }
     }
 
     _invokeMeetingWindow: (*) => void;
