@@ -95,6 +95,7 @@ class App extends Component<*> {
             return;
         }
 
+        console.log("conference: ", conference);
         // change route when we are notified
         this.props.dispatch(push('/temp'));
         this.props.dispatch(push('/conference', conference));
