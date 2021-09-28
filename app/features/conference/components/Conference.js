@@ -15,7 +15,7 @@ import { conferenceEnded, conferenceJoined } from '../actions';
 import JitsiMeetExternalAPI from '../external_api';
 import { LoadingIndicator, Wrapper } from '../styled';
 import Loading from '../../always-on-top/Loading';
-import { createConferenceObjectFromURL, createMeetingWindow, getServerURL } from '../../utils';
+import { createConferenceObjectFromURL, /*createMeetingWindow,*/ getServerURL } from '../../utils';
 
 const electron = window.require('electron');
 const os = window.require('os');
@@ -217,7 +217,7 @@ class Conference extends Component<Props, State> {
 
     _updateAppBadge(showBadge) {
         if(os.platform() === "win32") {
-            electron.remote?.ipcRenderer?.sendSync('update-badge', showBadge ? "•": null)
+            electron.ipcRenderer?.sendSync('update-badge', showBadge ? "•": null)
         }
         else {
             electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
