@@ -217,7 +217,7 @@ class Conference extends Component<Props, State> {
 
     _updateAppBadge(showBadge) {
         if(os.platform() === "win32") {
-            electron.ipcRenderer?.sendSync('update-badge', showBadge ? "•": null)
+            electron.ipcRenderer?.sendSync('update-badge', showBadge)
         }
         else {
             electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
