@@ -15,7 +15,10 @@ import { conferenceEnded, conferenceJoined } from '../actions';
 import JitsiMeetExternalAPI from '../external_api';
 import { LoadingIndicator, Wrapper } from '../styled';
 import Loading from '../../always-on-top/Loading';
-import { createConferenceObjectFromURL, getServerURL } from '../../utils';
+import { createConferenceObjectFromURL, /*createMeetingWindow,*/ getServerURL } from '../../utils';
+
+const electron = window.require('electron');
+const os = window.require('os');
 
 const ENABLE_REMOTE_CONTROL = false;
 
@@ -119,6 +122,8 @@ class Conference extends Component<Props, State> {
         this._onIframeLoad = this._onIframeLoad.bind(this);
         this._onVideoConferenceEnded = this._onVideoConferenceEnded.bind(this);
         this._onExplicitIframeReload = this._onExplicitIframeReload.bind(this);
+        this._updateAppBadge = this._updateAppBadge.bind(this);
+        this._invokeMeetingWindow = this._invokeMeetingWindow.bind(this);
         // this._onExplicitScreenshareInit = this._onExplicitScreenshareInit.bind(this);
     }
 
@@ -208,6 +213,28 @@ class Conference extends Component<Props, State> {
         // window.jitsiNodeAPI.ipc.send('explicit-screenshare-init');
     // }
 
+    _updateAppBadge: (*) => void;
+
+    _updateAppBadge(showBadge) {
+        if(os.platform() === "win32") {
+            electron.ipcRenderer?.sendSync('update-badge', showBadge)
+        }
+        else {
+            electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
+        }
+    }
+
+    _invokeMeetingWindow: (*) => void;
+
+
+    /**
+     * Open meeting in a separate window.
+     * @param {*} config containing the meetingID 
+     */
+    _invokeMeetingWindow({ config: data }) {
+        createMeetingWindow(data);
+    }
+
     _onExplicitIframeReload: (*) => void;
 
     /**
@@ -276,6 +303,30 @@ class Conference extends Component<Props, State> {
             ...searchParameters,
             ...locale
         };
+        
+        // let configSplit;
+        // let configObj = {};
+        // if(url.hash) {
+        //     configSplit = url.hash.substring(1).split("&");
+        //     for(let i = 0; i < configSplit.length; i++) {
+        //         let param = configSplit[i].split("=")
+        //         if(param.length > 1 && param[0].startsWith("config.")) {
+        //             let val = param[1];
+        //             try {
+        //                 val = JSON.parse(param[1])
+        //             }
+        //             catch(e) {
+        //             }
+                    
+        //             configObj[param[0].split(".")[1]] = val;
+        //         }
+        //     }
+        // }
+
+        // const configOverwrite = Object.assign({},{
+        //     startWithAudioMuted: this.props._startWithAudioMuted,
+        //     startWithVideoMuted: this.props._startWithVideoMuted
+        // }, configObj );
 
         const configOverwrite = {
             startWithAudioMuted: this.props._startWithAudioMuted,
@@ -294,7 +345,10 @@ class Conference extends Component<Props, State> {
             ...urlParameters
         });
 
+        this._api.on('invokeMeetingWindow', this._invokeMeetingWindow)
         this._api.on('explicitIframeReload', this._onExplicitIframeReload);
+        this._api.on('updateAppBadge', this._updateAppBadge);
+
         this._api.on('liveMessage', ({
                 from,
                 id,
