@@ -136,6 +136,7 @@
     "electron-updater": "4.2.5",
     "electron-util": "0.14.2",
     "electron-window-state": "5.0.3",
+    "electron-windows-badge": "^1.1.0",
     "history": "4.10.1",
     "i18next": "19.4.5",
     "jifmeet-electron-utils": "1.0.10",

@@ -17,6 +17,7 @@ import { createConferenceObjectFromURL, getServerURL } from '../../utils';
 import Loading from '../../always-on-top/Loading';
 
 const electron = window.require('electron');
+const os = window.require('os');
 const { BrowserWindow } = electron.remote
 
 const ENABLE_REMOTE_CONTROL = false;
@@ -148,7 +149,12 @@ class Home extends Component<Props, State> {
     _updateAppBadge: (*) => void;
 
     _updateAppBadge({showBadge}) {
-        electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
+        if(os.platform() === "win32") {
+            electron.remote?.ipcRenderer?.sendSync('update-badge', showBadge ? "•": null)
+        }
+        else {
+            electron.remote?.app?.dock?.setBadge(showBadge ? "•": "");
+        }
     }
 
     _onExplicitIframeReload: (*) => void;
