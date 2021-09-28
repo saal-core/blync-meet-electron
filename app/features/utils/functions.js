@@ -2,16 +2,6 @@
 
 import config from "../config";
 
-const {
-    initPopupsConfigurationMain,
-    getPopupTarget,
-    setupAlwaysOnTopMain,
-    setupPowerMonitorMain,
-    setupScreenSharingMain
-} = window.require('jifmeet-electron-utils');
-
-const windowStateKeeper = window.require('electron-window-state');
-
 // @flow
 
 
@@ -102,64 +92,4 @@ export function createConferenceObjectFromURL(inputURL: string) {
         room,
         serverURL
     };
-}
-
-export function createMeetingWindow(data) {
-    const electron = window.require('electron');
-    const { BrowserWindow, ipcMain } = electron.remote;
-    const [mainWindow] = BrowserWindow.getAllWindows();
-
-    // Load the previous window state with fallback to defaults.
-    const windowState = windowStateKeeper({
-        defaultWidth: 1220,
-        defaultHeight: 800
-    });
-
-    const options = {
-        x: windowState.x,
-        y: windowState.y,
-        width: windowState.width,
-        height: windowState.height,
-        // icon: path.resolve(basePath, './resources/icon.png'),
-        minWidth: 1220,
-        minHeight: 800,
-        show: false,
-        webPreferences: {
-            enableBlinkFeatures: 'RTCInsertableStreams',
-            enableRemoteModule: true,
-            nativeWindowOpen: true,
-            nodeIntegration: true,
-            preload: mainWindow.webContents.getWebPreferences().preload
-        }
-    };
-
-    
-    //window.open('https://dev-jifmeet.saal.ai/67-1621754475599-363#config.prejoinPageEnabled=false')
-    const child = new BrowserWindow(Object.assign({}, options, { parent: mainWindow }));
-    windowState.manage(child);
-    child.show()
-    child.loadURL(mainWindow.getURL()/*, `${config.defaultServerURL}/${data.meetingID}#config.prejoinPageEnabled=false`*/);
-    setupAlwaysOnTopMain(child);
-    setupPowerMonitorMain(child);
-    setupScreenSharingMain.setup(child, config.appName, 'com.jifmeet.meet.desktopapp');
-
-    child.webContents.on('new-window', (event, url, frameName) => {
-        const target = getPopupTarget(url, frameName);
-
-        if (!target || target === 'browser') {
-            event.preventDefault();
-            openExternalLink(url);
-        }
-    });
-
-    let rendererReady = false;
-    /**
-     * This is to notify main.js [this] that front app is ready to receive messages.
-     */
-    ipcMain.on('renderer-ready', () => {
-        rendererReady = true;
-        child
-            .webContents
-            .send('protocol-data-msg', `${data.meetingID}#config.prejoinPageEnabled=false`);
-    });
 }
