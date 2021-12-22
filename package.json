@@ -1,6 +1,6 @@
 {
   "name": "jifmeet-electron",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Electron application for Jifmeet",
   "main": "./build/main.js",
   "productName": "Jifmeet",
@@ -138,7 +138,7 @@
     "electron-window-state": "5.0.3",
     "history": "4.10.1",
     "i18next": "19.4.5",
-    "jifmeet-electron-utils": "1.0.10",
+    "jifmeet-electron-utils": "1.0.11",
     "js-utils": "github:jitsi/js-utils#cf11996bd866fdb47326c59a5d3bc24be17282d4",
     "moment": "2.23.0",
     "mousetrap": "1.6.2",
