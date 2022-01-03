@@ -164,6 +164,11 @@ function createJitsiMeetWindow() {
     // Application menu.
     setApplicationMenu();
 
+    if (process.platform === 'win32')
+    {
+        app.setAppUserModelId(app.name);
+    }
+
     // set feedURL for testing the private repo
     /*autoUpdater.setFeedURL({
         provider: 'github',
@@ -260,8 +265,12 @@ function createJitsiMeetWindow() {
        
         if(cameraPermission !== 'granted') {
             let success = await systemPreferences.askForMediaAccess('camera');
+            // let success = isDev ? false : await systemPreferences.askForMediaAccess('camera');
             if(!(success === true || success === 'granted')) {
                 maximizeWindow();
+                // if(isDev) {
+                //     return
+                // }
                 options.message = "Jifmeet requires access to the camera";
                 dialog.showMessageBox(mainWindow, options)
                 .then(result => {
