@@ -1,6 +1,6 @@
 {
   "name": "jifmeet-electron",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Electron application for Jifmeet",
   "main": "./build/main.js",
   "productName": "Jifmeet",
@@ -76,7 +76,8 @@
           "target": "nsis"
         }
       ],
-      "certificateFile": "C:\\Users\\jenkins\\.ssh\\saal-cs-cert-withkey.pfx",
+      "certificateFile": "C:\\Users\\jenkins\\Documents\\saal-cs-cert-pks7.p7b",
+      "certificateSubjectName": "SAAL OPERATING SYSTEMS - SOLE PROPRIETORSHIP L.L.C.",
       "signingHashAlgorithms": [
         "sha256"
       ],
